@@ -1,0 +1,28 @@
+<!-- Name: Jose Franco Baquera -->
+<!-- Date: Program 9, 2018 -->
+<!-- Class: CS - 371 Software Development -->
+<!-- File: build.xml -->
+<!-- Assignment: Program 2 -->
+
+<project default = "compile">
+    
+    <!-- This compiles all java files in the current working directory. -->
+    <target name="compile"  >
+        <javac srcdir="." includeantruntime = "false"/>
+    </target>
+    
+    <!-- This will allow us to write "ant run" (i.e. compile, then run). -->
+    <target name="run" depends = "compile" >
+       <echo message = "SUCCESS!!!! :)" />
+       <echo message = "NOTE: The ant run command was inputted. Changing the working directory to the test folder. :)" />
+       <echo message = "In other words, please exclude the directory test while inputing the URL. :)" />
+       <java classname = "WebServer" fork="true" >
+          <!-- Change the current working directory to inside the testfolder -->
+          <arg value="true"/>
+       </java>  
+    </target>
+    
+    <!-- End of Project -->
+</project>
+
+

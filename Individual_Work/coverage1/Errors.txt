@@ -1,0 +1,111 @@
+/**
+
+   Name: Jose Franco Baquera
+   Date: November 29, 2018
+   CS371 - Software Development
+   File Name: Errors.txt
+   Purpose of File: Describes the errors found on both the IglooScore1 and IglooScore2 classes.
+
+**/
+
+###############NOTE: The TA will need to change the class path on line 9 of the build file
+(i.e. <property name="jacocodir" location="/home/ugrad8/jbaquera/tools/jacoco-0.8.2/lib"/>) for it to work 
+on his particular computer. After this change is made, the TA will be able to commands such as "ant" or "ant compile".
+ 
+***********************************************************************************************************************************************
+(NOTE: This section corresponds to the IglooScore1 class.) 
+
+Included a test with only two arguments to get an error.
+Included a test with two integers and one character to get an error.
+Included a test where score 2 was the largest score.
+Included a test where score 1 was the largest score.
+Included a test where score 3 was the largest score. 
+Included a test where score 2 was the smallest score. 
+Included various tests where two or more valid scores are repeated. 
+These tests lead to 100% coverage in the Instructions and Branches columns.
+    
+@@@@@Invalid Inputs
+    We note that the "test cases" 'TEST IglooScore1: 9 6' and 'TEST IglooScore1: A 9 6' are invalid inputs that produce an error message since
+the length of parameters must be 3 AND all the parameters must be integers. The first test has parameter length equal to 2 while the second
+test has a character as a parameter. We do not have to "fix" errors for invalid inputs. 
+
+@@@@@Valid Inputs
+    One functional error was found (i.e. on line 43) when the test cases 'TEST IglooScore1: 8 9 14' and 'TEST IglooScore1: 10 9 14' were run.
+That is, whenever the last parameter is the largest score, the overallScore() function produces faulty results. For example, the program computed 22 
+as the overall score for the first test case when in reality the correct answer is 23. To fix this error, I simply changed line 43 in the IglooScore1 
+class to the following: if (score1 > score2). This fixed the error. Here is the function overallScore() in more detailed after I changed line 43:
+    
+    public int overallScore()
+    {
+    int s;
+    if (score1 > score2) // Error found on this line. Changed by Jose Franco Baquera.
+        s = score2;
+    else
+        s = score1;
+    if (s > score3)
+        s = score3;
+    s = (score1+score2+score3) - s;   
+    return s;
+    }
+
+***********************************************************************************************************************************************
+(NOTE: This section corresponds to the IglooScore2 class.)
+
+Included a test with only two arguments to get an error.
+Included a test with two integers and one character to get an error.
+Included a test with all negative scores.
+Included a test with two negative scores.
+Included a test with one negative score.
+Included a test with all scores larger than 50.
+Included a test with two scores larger than 50.
+Included a test with one score larger than 50.
+Included two tests with the highest score as score 2
+   but alternating second highest score. 
+Included two tests with the highest score as score 1
+Included various test where two or more valid scores are repeated. 
+These tests lead to 100% coverage in the Instructions and Branches columns.
+
+@@@@@Invalid Inputs
+    We note that the first EIGHT "test cases" are invalid inputs that produce an error message since the length of parameters must be 3 AND 
+all the parameters must be integers. Furthermore, scores must be within range 0 to 50 (i.e. the domain does not include (-INFINITY, -1] and [51, INFINITY)). 
+We do not have to "fix" errors for invalid inputs. 
+
+@@@@@Valid Inputs
+    One functional error was found (i.e. on line 48) when the test case 'TEST IglooScore2: 9 6 8' was run. The reason why this line produces a functional 
+error is because if both conditional checks are true, then score 1 and score 3 are the two highest scores, NOT score 1 and score 2. I fixed this error by 
+simply changing that line of code to the following:  s2 = score3;. Another functional error that I found was located on lines 43 and 46 and was discovered by running 
+the test cases that have repeated values. These two conditional checks where missing the '=' sign and thus test cases were the scores repeated resulted in faulty 
+results. To fix this error, I simply changed line 43 to 'if (score1 <= score2 && score1 < score3) {' and line 46 to '} else if (score2 < score1 && score2 <= score3) {'. 
+This change allowed for correct results even if the first two or last two scores are equal. The last error that I fixed was having a redundant 'else if' that was not 
+needed in the code. Because of this, we only needed to change the assignments in the else statement to the following: 
+  s1 = score1; 
+  s2 = score2; 
+  
+The following is the overallScore() function with all the errors fixed:
+
+public int overallScore()
+{
+   int s, s1, s2;
+   if (score1 <= score2 && score1 < score3) { // Added equals to check if the first two scores are repeated.
+      s1 = score2;
+      s2 = score3;
+   } else if (score2 < score1 && score2 <= score3) { // Added equals to check if the last two scores are repeated.
+      s1 = score1;
+      s2 = score3; // Error found on this line. If both conditional checks are true then score 1 and score 3 are the two highest scores.
+   } else { // Took out the second else if since it is not needed. 
+      s1 = score1; // Changed these two lines of code. This last else case will execute if the three scores are 
+      s2 = score2; // equal OR if score 3 is the smallest of the scores. 
+   }
+   s = s1 + s2;
+   return s;
+}
+
+We note that the else statement will execute only if the three scores are the same OR if score 3 is the smallest out of all three scores. 
+
+@@@@@Miscellaneous Change
+    I changed line 60 from 'if (args==null || args.length != 3) {' to 'if (args.length != 3) {'. As various internet sources 
+state, args CAN NEVER BE NULL. In other words, this particular line of code was not allowing us to have 100% test coverage since the args==null
+conditional check will never be reached. Another way to check if there are no parameters passed by the user would be 
+to include args.length == 0, but such conditional check would be redundant since args.length != 3 already checks if the number of parameters 
+passed is 3 (and only 3). 
+***********************************************************************************************************************************************

@@ -1,0 +1,20 @@
+<!-- Name: Jose Franco Baquera -->
+<!-- Date: August 24, 2018 -->
+<!-- Class: CS - 371 Software Development -->
+<!-- File: build.xml -->
+<!-- Assignment: Program 1 -->
+
+<project default = "compile">
+    
+    <!-- This compiles all java files in the current working directory. -->
+    <target name="compile"  >
+        <javac srcdir="." includeantruntime = "false"/>
+    </target>
+    
+    <!-- This will allow us to write "ant run" (i.e. compile, then run). -->
+    <target name="run" depends = "compile" >
+        <java classname = "WebServer" fork="true"/>
+    </target>
+
+    <!-- End of Project -->
+</project>
